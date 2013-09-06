@@ -29,6 +29,18 @@ module.exports = function(app, config) {
     app.use(express.bodyParser());
     app.use(express.methodOverride());
 
+    // Setup CORS
+    app.use(function(req, res, next) {
+      res.header('Access-Control-Allow-Origin', config.clientUrl);
+      res.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With');
+      res.header('Access-Control-Allow-Credentials', 'true');
+      if (req.method === 'OPTIONS') {
+        res.send(200);
+      } else {
+        next();
+      }
+    });
+
     // Sessions
     app.use(express.session({
       secret: config.app.secret,
