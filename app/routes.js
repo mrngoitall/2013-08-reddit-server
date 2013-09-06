@@ -1,18 +1,6 @@
 var passport      = require('passport');
 
 module.exports = function(app, config) {
-  // Setup CORS
-  app.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', config.clientUrl);
-    res.header('Access-Control-Allow-Headers', 'Content-Type,X-Requested-With');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    next();
-  });
-
-  app.options('*', function(req, res){
-    res.send(200); 
-  });
-
   // Setup API blockade
   app.all('/api/*', function(req, res, next) {
     // passport gives us a 'isAuthenticated' method
@@ -23,11 +11,14 @@ module.exports = function(app, config) {
   });
 
   // Auth
-  app.post('/api/login', function(req, res, next) {
-    // Implement login
+  app.post('/login', 
+    passport.authenticate('local', { failureRedirect: '/login' }),
+    function(req, res, next) {
+      // Implement login
+      res.redirect('/');
   });
 
-  app.post('/api/signup', function(req, res, next) {
+  app.post('/signup', function(req, res, next) {
     // Implement signup
   });
 
