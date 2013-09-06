@@ -3,23 +3,20 @@ var mongoose    = require('mongoose'),
 
 
 module.exports = function(app, config) {
-  var db = mongoose.connect(config.db);
+  //mongoose.connect(config.db);
+  mongoose.connect('mongodb://localhost/mydb');
 
   // Setup database and UserSchema
-
+  var db = mongoose.connection;
   db.on('error', console.error.bind(console, 'connection error: '));
 
-  db.once('open', function() {
-
-    var userSchema = mongoose.Schema({ 
-      username: String,
-      password: String,
-      salt: String
-    });
-
-    var User = mongoose.model('User', userSchema);
-
+  var userSchema = mongoose.Schema({ 
+    username: String,
+    profileId: String
   });
+
+  var User = mongoose.model('User', userSchema);
+
 
   return db;
 }
