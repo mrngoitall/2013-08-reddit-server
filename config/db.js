@@ -3,8 +3,7 @@ var mongoose    = require('mongoose'),
 
 
 module.exports = function(app, config) {
-  //mongoose.connect(config.db);
-  mongoose.connect('mongodb://localhost/mydb');
+  mongoose.connect(config.db);
 
   // Setup database and UserSchema
   var db = mongoose.connection;
@@ -12,11 +11,16 @@ module.exports = function(app, config) {
 
   var userSchema = mongoose.Schema({ 
     username: String,
-    profileId: String
+    password: String,
+    email: String,
+    sessionId: String
   });
 
-  var User = mongoose.model('User', userSchema);
+  userSchema.methods.verifyPassword = function(password) {
+    return password === this.password;
+  };
 
+  var User = mongoose.model('User', userSchema);
 
   return db;
 }
