@@ -1,5 +1,3 @@
-var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
-
 module.exports = function(grunt) {
 
   grunt.initConfig({
@@ -9,10 +7,10 @@ module.exports = function(grunt) {
     },
     watch: {
       js: {
-        files: 'js/**/*.js'
+        files: 'public/js/**/*.js'
       },
       html: {
-        files: ['templates/**/*.html', 'index.html']
+        files: ['public/*.html']
       }
     },
     concurrent: {
@@ -22,41 +20,12 @@ module.exports = function(grunt) {
           logConcurrentOutput: true
         }
       }
-    },
-    connect: {
-      options: {
-        port: 3000,
-        hostname: 'localhost'
-      },
-      proxies: [
-        {
-          context: '/reddit',
-          host: 'www.reddit.com',
-          port: 80,
-          https: false,
-          changeOrigin: false,
-          rewrite: {
-            '/^reddit': ''
-          }
-        }
-      ],
-      livereload: {
-        options: {
-          middleware: function(connect) {
-            return [
-              proxySnippet
-            ];
-          }
-        }
-      }
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-connect-proxy');
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['configureProxies','concurrent:target']);
+  grunt.registerTask('default', ['concurrent:target']);
 }
