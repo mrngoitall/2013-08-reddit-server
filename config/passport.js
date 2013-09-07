@@ -21,7 +21,7 @@ module.exports = function(app, config) {
     console.log('serializing user');
     User.findOne({ username:user.username }, function(err, user) {
       if (err) { return done(null, false, {message: 'Unable to initialize session'}); }
-      user.sessionId = sessionIdGenerator();
+      user.sessionId = user._id;
       user.save();
       done(null, user.sessionId);
     })

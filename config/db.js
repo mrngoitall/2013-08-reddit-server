@@ -17,7 +17,6 @@ module.exports = function(app, config) {
   });
 
   userSchema.methods.verifyPassword = function(password) {
-    console.log('verifying password');
     return password === this.password;
   };
 
