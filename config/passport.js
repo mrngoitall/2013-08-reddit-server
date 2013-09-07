@@ -18,12 +18,17 @@ module.exports = function(app, config) {
   ));
 
   passport.serializeUser(function(user, done) {
-    User.findOne({ user:user }, function(err, user) {
+    console.log('serializing user');
+    User.findOne({ username:user.username }, function(err, user) {
+      if (err) { return done(null, false, {message: 'Unable to initialize session'}); }
+      user.sessionId = sessionIdGenerator();
+      user.save();
       done(null, user.sessionId);
     })
   });
 
   passport.deserializeUser(function(sessionId, done) {
+    console.log('deserializing user');
     findBySessionId(sessionId, function(err, user) {
       done(err, user);
     });
@@ -37,3 +42,10 @@ var findBySessionId = function(sessionId, fn) {
     return fn(null, user);
   })
 };
+
+var sessionIdGenerator = function() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    return v.toString(16);
+  });
+}

@@ -1,4 +1,5 @@
 var express     = require('express'),
+    flash       = require('connect-flash'),
     passport    = require('passport'),
     mongoStore  = require('connect-mongo')(express),
     path        = require('path');
@@ -46,6 +47,7 @@ module.exports = function(app, config) {
       secret: config.app.secret,
       store: new mongoStore({ url: config.db })
     }));
+    app.use(flash());
 
     // Use passport
     app.set('passport', passport);

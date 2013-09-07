@@ -17,10 +17,19 @@ module.exports = function(app, config) {
   });
 
   userSchema.methods.verifyPassword = function(password) {
+    console.log('verifying password');
     return password === this.password;
   };
 
   var User = mongoose.model('User', userSchema);
+
+  // var testUser = new User({ 
+  //   username: 'test',
+  //   password: 'tester',
+  //   email: 'sometest@gmail.com',
+  //   sessionId: '' });
+
+  // testUser.save();
 
   return db;
 }

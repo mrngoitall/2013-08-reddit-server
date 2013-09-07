@@ -9,13 +9,21 @@ module.exports = function(app, config) {
 
     return res.send(401, 'Unauthorized');
   });
+  
+/*function(err, data, info) {
+      console.log("AUTH", err, data, info);
+    })*/
 
   // Auth
   app.post('/login', 
-    passport.authenticate('local', { failureRedirect: '/login' }),
+    passport.authenticate('local', { 
+      successRedirect: '/successredirect',
+      successFlash: "Successful login!",
+      failureRedirect: '/loginagain', 
+      failureFlash: "Invalid username or password" }),
     function(req, res, next) {
       // Implement login
-      res.redirect('/');
+      res.redirect('/success');
   });
 
   app.post('/signup', function(req, res, next) {
