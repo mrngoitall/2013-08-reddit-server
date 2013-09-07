@@ -9,9 +9,13 @@ module.exports = function(app, config) {
   passport.use(new LocalStrategy(
     function(username, password, done) {
       User.findOne({ username: username }, function(err, user) {
+        console.log('finding users');
         if (err) { return done(err); }
         if (!user) { return done(null, false, { message: 'Unknown user'}); }
         if (!user.verifyPassword(password)) { return done(null, false, {message: 'Invalid password'}); }
+        user.sessionId = user._id;
+        console.log(user);
+        user.save();
         return done(null, user);
       });
     }
@@ -21,8 +25,6 @@ module.exports = function(app, config) {
     console.log('serializing user');
     User.findOne({ username:user.username }, function(err, user) {
       if (err) { return done(null, false, {message: 'Unable to initialize session'}); }
-      user.sessionId = user._id;
-      user.save();
       done(null, user.sessionId);
     })
   });

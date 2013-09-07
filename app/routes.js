@@ -12,7 +12,7 @@ module.exports = function(app, config) {
     return res.send(401, 'Unauthorized');
   });
 
-/*function(err, data, info) {
+    /*function(err, data, info) {
       console.log("AUTH", err, data, info);
     })*/
 
@@ -22,20 +22,20 @@ module.exports = function(app, config) {
       successRedirect: '/successredirect',
       successFlash: "Successful login!",
       failureRedirect: '/loginagain', 
-      failureFlash: "Invalid username or password" }),
+      failureFlash: "Invalid username or password" 
+    }),
     function(req, res, next) {
       // Implement login
       res.redirect('/success');
-  }
+    }
   );
 
   app.post('/signup', function(req, res, next) {
     // Implement signup
 
-
     // Confirm that this username isn't already taken
     User.findOne({ username: req.body.username }, function(err, user) {
-      if (err) { return err; }
+      if (err) { res.send(500, err); }
       if (user) { 
         res.send(200,{ message: 'Username already taken'});
       } else {
@@ -48,6 +48,7 @@ module.exports = function(app, config) {
         newUser.save();
 
         res.send(200,{sessionId: newUser._id});
+        //res.redirect('/success');
       };
     });
 
@@ -55,6 +56,8 @@ module.exports = function(app, config) {
 
   app.get('/api/news', function(req, res, next) {
     // Implement news api
+
+    
   });
 
   app.get('/api/rate', function(req, res, next) {
